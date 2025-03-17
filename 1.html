@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>有效的学习方法</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 40px 20px;
+            margin: 20px;
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            height: 16px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .progress {
+            background-color: #5cb85c;
+            height: 100%;
+            width: 33%;
+            border-radius: 8px;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .question {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 50px;
+            font-weight: bold;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .option {
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 24px;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            border-color: #5cb85c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option.selected {
+            background-color: #e8f5e9;
+            border-color: #5cb85c;
+        }
+        
+        .option.correct {
+            background-color: #e8f5e9;
+            border-color: #5cb85c;
+        }
+        
+        .option.incorrect {
+            background-color: #ffebee;
+            border-color: #f44336;
+        }
+        
+        .feedback {
+            text-align: center;
+            font-size: 20px;
+            color: #5cb85c;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .feedback.show {
+            opacity: 1;
+        }
+        
+        .feedback-icon {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .feedback.incorrect {
+            color: #f44336;
+        }
+
+        .next-button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 20px auto 0;
+            display: none;
+            transition: background-color 0.3s;
+        }
+
+        .next-button:hover {
+            background-color: #4caf50;
+        }
+
+        .next-button.show {
+            display: block;
+        }
+
+        .questions-container {
+            position: relative;
+            min-height: 400px;
+        }
+
+        .question-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.5s, transform 0.5s;
+            pointer-events: none;
+        }
+
+        .question-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">有效的学习方法</h1>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress-bar"></div>
+        </div>
+        
+        <div class="questions-container">
+            <div class="question-slide active" data-id="1">
+                <div class="question">他来中国经历了两个月的_____</div>
+                
+                <div class="options">
+                    <div class="option" data-correct="false">A. 过渡阶段</div>
+                    <div class="option" data-correct="true">B. 过渡时期</div>
+                    <div class="option" data-correct="false">C. 过渡课程</div>
+                </div>
+                
+                <div class="feedback" id="feedback-1">
+                    <span class="feedback-icon">✓</span>
+                    正确！过渡时期是较为正式的表达
+                </div>
+
+                <button class="next-button" id="next-1">下一题</button>
+            </div>
+
+            <div class="question-slide" data-id="2">
+                <div class="question">大学毕业是人生中一个重要的_____</div>
+                
+                <div class="options">
+                    <div class="option" data-correct="true">A. 过渡阶段</div>
+                    <div class="option" data-correct="false">B. 过渡课程</div>
+                    <div class="option" data-correct="false">C. 调整时期</div>
+                </div>
+                
+                <div class="feedback" id="feedback-2">
+                    <span class="feedback-icon">✓</span>
+                    正确！"过渡阶段"常用于描述人生的转变期
+                </div>
+
+                <button class="next-button" id="next-2">下一题</button>
+            </div>
+
+            <div class="question-slide" data-id="3">
+                <div class="question">"有效"的英文是什么？</div>
+                
+                <div class="options">
+                    <div class="option" data-correct="false">Important</div>
+                    <div class="option" data-correct="true">Effective</div>
+                    <div class="option" data-correct="false">Efficient</div>
+                    <div class="option" data-correct="false">Useful</div>
+                </div>
+                
+                <div class="feedback" id="feedback-3">
+                    <span class="feedback-icon">✓</span>
+                    正确！使用闪卡是一种有效的记忆方法
+                </div>
+                <div style="text-align: center; margin-top: 10px; font-size: 18px; color: #666;">
+                    选择正确的选项完成测验
+                </div>
+
+                <button class="next-button" id="next-3">完成测验</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化
+        let currentQuestion = 1;
+        const totalQuestions = document.querySelectorAll('.question-slide').length;
+        updateProgressBar();
+
+        // 为所有选项添加点击事件
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                // 如果已经选择了答案，不做任何事
+                if (this.classList.contains('correct') || this.classList.contains('incorrect')) {
+                    return;
+                }
+
+                const isCorrect = this.getAttribute('data-correct') === 'true';
+                const currentSlide = document.querySelector(`.question-slide[data-id="${currentQuestion}"]`);
+                const options = currentSlide.querySelectorAll('.option');
+                const feedback = document.getElementById(`feedback-${currentQuestion}`);
+                const nextButton = document.getElementById(`next-${currentQuestion}`);
+                
+                // 移除之前的选择
+                options.forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+                
+                // 标记当前选择
+                if (isCorrect) {
+                    this.classList.add('correct');
+                    feedback.classList.add('show');
+                    this.classList.add('pulse');
+                } else {
+                    this.classList.add('incorrect');
+                    feedback.classList.add('show', 'incorrect');
+                    feedback.innerHTML = '<span class="feedback-icon">✗</span> 不正确，请再试一次';
+                    
+                    // 显示正确答案
+                    options.forEach(opt => {
+                        if (opt.getAttribute('data-correct') === 'true') {
+                            setTimeout(() => {
+                                opt.classList.add('correct', 'pulse');
+                            }, 1000);
+                        }
+                    });
+                }
+                
+                // 显示下一题按钮
+                nextButton.classList.add('show');
+            });
+        });
+
+        // 为所有下一题按钮添加点击事件
+        document.querySelectorAll('.next-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const currentSlide = document.querySelector(`.question-slide[data-id="${currentQuestion}"]`);
+                currentSlide.classList.remove('active');
+                
+                if (currentQuestion < totalQuestions) {
+                    currentQuestion++;
+                    const nextSlide = document.querySelector(`.question-slide[data-id="${currentQuestion}"]`);
+                    nextSlide.classList.add('active');
+                    updateProgressBar();
+                } else {
+                    // 测验完成
+                    document.querySelector('.questions-container').innerHTML = `
+                        <div style="text-align: center; padding: 50px 0;">
+                            <h2 style="color: #5cb85c; font-size: 32px;">恭喜您完成测验！</h2>
+                            <p style="font-size: 20px; margin-top: 20px;">继续学习更多有效的学习方法</p>
+                            <div style="margin-top: 30px;">
+                                <span style="font-size: 24px; color: #5cb85c;">✓</span>
+                                <span style="font-size: 20px; margin-left: 10px;">正确！使用闪卡是一种有效的记忆方法</span>
+                            </div>
+                        </div>
+                    `;
+                    updateProgressBar(100);
+                }
+            });
+        });
+
+        // 更新进度条
+        function updateProgressBar(customProgress) {
+            const progress = customProgress || (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+    </script>
+</body>
+</html>
